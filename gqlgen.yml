@@ -1,0 +1,24 @@
+schema:
+- "schema/*.graphql"
+
+exec:
+  filename: server/generated.go
+  package: server
+
+model:
+  filename: models/models.go
+  package: models
+
+resolver:
+  filename: resolver/resolver.go
+  package: resolver
+  type: Resolver
+
+models:
+  Coffee:
+    model: github.com/hashicorp-demoapp/public-api/models.Coffee
+  Ingredient:
+    model: github.com/hashicorp-demoapp/public-api/models.Ingredient
+  User:
+    model: github.com/hashicorp-demoapp/public-api/models.User
+  

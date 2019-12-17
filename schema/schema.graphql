@@ -1,0 +1,21 @@
+# Generic queries.
+type Query {
+  version: String!
+}
+
+# Generic mutations.
+type Mutation {
+  login: Boolean!
+}
+
+# Check if the user is authenticated.
+directive @isAuthenticated on FIELD_DEFINITION
+
+# Check if the user has a certain role.
+directive @hasRole(role: Role!) on FIELD_DEFINITION
+
+# The possible roles a user can have.
+enum Role {
+  ADMIN
+  USER
+}

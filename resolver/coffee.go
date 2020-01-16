@@ -11,5 +11,9 @@ func (r *queryResolver) Coffee(ctx context.Context, coffeeID string) (*models.Co
 }
 
 func (r *queryResolver) Coffees(ctx context.Context) ([]*models.Coffee, error) {
-	return []*models.Coffee{}, nil
+	coffees, err := r.CoffeeService.FindCoffees()
+	if err != nil {
+		return nil, err
+	}
+	return coffees, nil
 }

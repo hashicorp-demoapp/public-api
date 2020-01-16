@@ -76,5 +76,5 @@ func main() {
 	r.Handle("/api", handler.GraphQL(server.NewExecutableSchema(c)))
 
 	log.Println("Listing on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", r))
 }

@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -49,6 +48,7 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	Coffee struct {
 		ID          func(childComplexity int) int
+		Image       func(childComplexity int) int
 		Ingredients func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Price       func(childComplexity int) int
@@ -114,6 +114,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Coffee.ID(childComplexity), true
+
+	case "Coffee.image":
+		if e.complexity.Coffee.Image == nil {
+			break
+		}
+
+		return e.complexity.Coffee.Image(childComplexity), true
 
 	case "Coffee.ingredients":
 		if e.complexity.Coffee.Ingredients == nil {
@@ -307,12 +314,13 @@ var parsedSchema = gqlparser.MustLoadSchema(
 	&ast.Source{Name: "schema/coffee.graphql", Input: `# Coffee queries.
 extend type Query {
   coffee(coffeeID: String!): Coffee
-  coffees: [Coffee] @isAuthenticated
+  coffees: [Coffee!]!
 }
 
 type Coffee {
   id: ID!
   name: String!
+  image: String!
   price: Float!
   ingredients: [Ingredient]
 }`},
@@ -527,6 +535,43 @@ func (ec *executionContext) _Coffee_name(ctx context.Context, field graphql.Coll
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Coffee_image(ctx context.Context, field graphql.CollectedField, obj *models.Coffee) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Coffee",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Image, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -859,40 +904,23 @@ func (ec *executionContext) _Query_coffees(ctx context.Context, field graphql.Co
 	ctx = graphql.WithResolverContext(ctx, rctx)
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().Coffees(rctx)
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			if ec.directives.IsAuthenticated == nil {
-				return nil, errors.New("directive isAuthenticated is not implemented")
-			}
-			return ec.directives.IsAuthenticated(ctx, nil, directive0)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, err
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.([]*models.Coffee); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/hashicorp-demoapp/public-api/models.Coffee`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Coffees(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.([]*models.Coffee)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOCoffee2ᚕᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx, field.Selections, res)
+	return ec.marshalNCoffee2ᚕᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffeeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_ingredient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2374,6 +2402,11 @@ func (ec *executionContext) _Coffee(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "image":
+			out.Values[i] = ec._Coffee_image(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "price":
 			out.Values[i] = ec._Coffee_price(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -2509,6 +2542,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_coffees(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "ingredient":
@@ -2861,6 +2897,57 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCoffee2githubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx context.Context, sel ast.SelectionSet, v models.Coffee) graphql.Marshaler {
+	return ec._Coffee(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCoffee2ᚕᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffeeᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Coffee) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		rctx := &graphql.ResolverContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithResolverContext(ctx, rctx)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCoffee2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalNCoffee2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx context.Context, sel ast.SelectionSet, v *models.Coffee) graphql.Marshaler {
+	if v == nil {
+		if !ec.HasError(graphql.GetResolverContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Coffee(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
 	return graphql.UnmarshalFloat(v)
 }
@@ -3177,46 +3264,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 
 func (ec *executionContext) marshalOCoffee2githubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx context.Context, sel ast.SelectionSet, v models.Coffee) graphql.Marshaler {
 	return ec._Coffee(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOCoffee2ᚕᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx context.Context, sel ast.SelectionSet, v []*models.Coffee) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		rctx := &graphql.ResolverContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithResolverContext(ctx, rctx)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOCoffee2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
 }
 
 func (ec *executionContext) marshalOCoffee2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx context.Context, sel ast.SelectionSet, v *models.Coffee) graphql.Marshaler {

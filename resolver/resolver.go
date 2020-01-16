@@ -4,13 +4,13 @@ import (
 	"context"
 
 	"github.com/hashicorp-demoapp/public-api/server"
-	// "github.com/hashicorp-demoapp/public-api/service"
+	"github.com/hashicorp-demoapp/public-api/service"
 )
 
 // Resolver is the grapqhl root resolver.
 // Add services here for convenient access in other resolvers.
 type Resolver struct {
-	// CoffeeService     *service.CoffeeService
+	CoffeeService     *service.CoffeeService
 	// IngredientService *service.IngredientService
 	// UserService *service.UserService
 }

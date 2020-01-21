@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp-demoapp/public-api/resolver"
 	"github.com/hashicorp-demoapp/public-api/server"
 	"github.com/hashicorp/go-hclog"
+	"github.com/nicholasjackson/env"
 
 	// "github.com/hashicorp-demoapp/public-api/service"
 	"github.com/gorilla/mux"
@@ -23,7 +24,16 @@ import (
 
 var logger hclog.Logger
 
+var bindAddress = env.String("BIND_ADDRESS", false, ":8080", "Bind address for the server")
+var metricsAddress = env.String("METRICS_ADDRESS", false, ":9102", "Metrics address for the server")
+var productAddress = env.String("PRODUCT_API_URI", false, "http://localhost:9090", "Address for the product api")
+
 func main() {
+	err := env.Parse()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Config.
 	// config := service.NewConfig()
 
@@ -63,7 +73,7 @@ func main() {
 	r.Use(auth.Middleware(authn))
 
 	// create the client to the products-api
-	pc := client.NewHTTP("http://localhost:19090")
+	pc := client.NewHTTP(*productAddress)
 
 	// Graphql.
 	c := server.Config{
@@ -90,9 +100,9 @@ func main() {
 	r.Handle("/", handler.Playground("Playground", "/api"))
 	r.Handle("/api", handler.GraphQL(server.NewExecutableSchema(c)))
 
-	logger.Info("Starting server", "bind", ":8080", "metrics", ":9103")
+	logger.Info("Starting server", "bind", *bindAddress, "metrics", *metricsAddress)
 
-	err = http.ListenAndServe("0.0.0.0:8080", r)
+	err = http.ListenAndServe(*bindAddress, r)
 	if err != nil {
 		logger.Error("Unable to start server", "error", err)
 		os.Exit(1)

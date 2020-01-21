@@ -9,6 +9,7 @@ require (
 	github.com/hashicorp/go-hclog v0.11.0
 	github.com/keratin/authn-go v1.1.0
 	github.com/magiconair/properties v1.8.1
+	github.com/nicholasjackson/env v0.6.0
 	github.com/spf13/viper v1.6.1
 	github.com/stretchr/testify v1.4.0
 	github.com/vektah/gqlparser v1.2.0

@@ -3,6 +3,7 @@ package resolver
 import (
 	"context"
 
+	"github.com/hashicorp-demoapp/product-api-go/client"
 	"github.com/hashicorp-demoapp/public-api/server"
 	"github.com/hashicorp-demoapp/public-api/service"
 )
@@ -10,9 +11,13 @@ import (
 // Resolver is the grapqhl root resolver.
 // Add services here for convenient access in other resolvers.
 type Resolver struct {
-	CoffeeService     *service.CoffeeService
+	CoffeeService *service.CoffeeService
 	// IngredientService *service.IngredientService
 	// UserService *service.UserService
+}
+
+func NewResolver(c *client.HTTP) *Resolver {
+	return &Resolver{service.NewCoffeeService(c)}
 }
 
 // Mutation handles graphql mutations.

@@ -6,6 +6,6 @@ extend type Query {
 
 type Ingredient {
   id: ID!
-  name: String!
-  quantity: Int!
+  name: String
+  quantity: Int
 }

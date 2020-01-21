@@ -4,10 +4,18 @@ extend type Query {
   coffees: [Coffee!]!
 }
 
+enum Currency {
+  USD
+  EUR
+  GBP
+}
+
 type Coffee {
   id: ID!
-  name: String!
-  image: String!
-  price: Float!
+  name: String
+  image: String
+  teaser: String
+  description: String
+  price(currency: Currency = USD): Float
   ingredients: [Ingredient]
 }

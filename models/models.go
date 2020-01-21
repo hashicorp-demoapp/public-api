@@ -8,6 +8,70 @@ import (
 	"strconv"
 )
 
+type Coffee struct {
+	ID          string        `json:"id"`
+	Name        *string       `json:"name"`
+	Image       *string       `json:"image"`
+	Teaser      *string       `json:"teaser"`
+	Description *string       `json:"description"`
+	Price       *float64      `json:"price"`
+	Ingredients []*Ingredient `json:"ingredients"`
+}
+
+type Ingredient struct {
+	ID       string  `json:"id"`
+	Name     *string `json:"name"`
+	Quantity *int    `json:"quantity"`
+}
+
+type User struct {
+	ID   string  `json:"id"`
+	Name *string `json:"name"`
+}
+
+type Currency string
+
+const (
+	CurrencyUsd Currency = "USD"
+	CurrencyEur Currency = "EUR"
+	CurrencyGbp Currency = "GBP"
+)
+
+var AllCurrency = []Currency{
+	CurrencyUsd,
+	CurrencyEur,
+	CurrencyGbp,
+}
+
+func (e Currency) IsValid() bool {
+	switch e {
+	case CurrencyUsd, CurrencyEur, CurrencyGbp:
+		return true
+	}
+	return false
+}
+
+func (e Currency) String() string {
+	return string(e)
+}
+
+func (e *Currency) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Currency(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Currency", str)
+	}
+	return nil
+}
+
+func (e Currency) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type Role string
 
 const (

@@ -14,10 +14,12 @@ func CoffeeFromProductsAPI(cof []productsapi.Coffee) ([]*Coffee, error) {
 	for i, co := range cof {
 		price := float64(co.Price)
 		c := &Coffee{
-			ID:    strconv.Itoa(co.ID),
-			Name:  &cof[i].Name,
-			Price: &price,
-			Image: &cof[i].Image,
+			ID:          strconv.Itoa(co.ID),
+			Name:        &cof[i].Name,
+			Price:       &price,
+			Teaser:      &cof[i].Teaser,
+			Description: &cof[i].Description,
+			Image:       &cof[i].Image,
 		}
 
 		// add the ingredients

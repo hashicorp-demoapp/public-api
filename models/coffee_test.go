@@ -14,10 +14,10 @@ func TestConvertsFromProductsAPI(t *testing.T) {
 
 	assert.Len(t, c, 2)
 	assert.Equal(t, strconv.Itoa(apiModel[0].ID), c[0].ID)
-	assert.Equal(t, apiModel[0].Name, c[0].Name)
-	assert.Equal(t, apiModel[0].Teaser, c[0].Teaser)
-	assert.Equal(t, apiModel[0].Description, c[0].Description)
-	assert.Equal(t, float64(apiModel[0].Price), c[0].Price)
+	assert.Equal(t, apiModel[0].Name, *c[0].Name)
+	assert.Equal(t, apiModel[0].Teaser, *c[0].Teaser)
+	assert.Equal(t, apiModel[0].Description, *c[0].Description)
+	assert.Equal(t, float64(apiModel[0].Price), *c[0].Price)
 
 	assert.Len(t, c[0].Ingredients, 2)
 	assert.Equal(t, strconv.Itoa(apiModel[0].Ingredients[0].IngredientID), c[0].Ingredients[0].ID)

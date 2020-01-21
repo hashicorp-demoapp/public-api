@@ -1,4 +1,6 @@
 # public-api
+[![CircleCI](https://circleci.com/gh/hashicorp-demoapp/public-api.svg?style=svg)](https://circleci.com/gh/hashicorp-demoapp/public-api)
+
 A GraphQL public API for the demo app
 
 # Creating a new release

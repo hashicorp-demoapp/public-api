@@ -38,11 +38,11 @@ jobs:
       - run:
           name: docker build
           command: |
-            docker build -t hashicorp-demoapp/public-api:${CIRCLE_TAG} .
+            docker build -t hashicorpdemoapp/public-api:${CIRCLE_TAG} .
       - run:
           name: docker push
           command: |
-            docker push hashicorp-demoapp/public-api:${CIRCLE_TAG}
+            docker push hashicorpdemoapp/public-api:${CIRCLE_TAG}
 
   publish-github-release:
     docker:

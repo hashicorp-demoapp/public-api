@@ -3,3 +3,4 @@ vendor
 coverage
 go.env
 .vscode
+bin

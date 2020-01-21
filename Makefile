@@ -1,3 +1,6 @@
+VERSION=v0.0.2
+REPOSITORY=hashicorp-demoapp/public-api
+
 .PHONY: auth
 
 all: generate run
@@ -7,6 +10,12 @@ generate:
 
 run:
 	go run main.go
+
+build_linux:
+	CGO_ENABLED=0 GOOS=linux go build -o ./bin/public-api main.go
+
+build_docker: build_linux
+	docker build -t ${REPOSITORY}:${VERSION} .
 
 auth:
 	docker run -it --rm \

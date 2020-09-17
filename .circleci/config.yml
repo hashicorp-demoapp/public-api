@@ -30,7 +30,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: install dependencies
-          command: curl https://shipyard.run/install | bash -c
+          command: curl https://shipyard.run/install | bash -s
       - run:
           name: build dev docker container
           command: make build_docker_dev

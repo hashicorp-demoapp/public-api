@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp-demoapp/product-api-go/client"
 	"github.com/hashicorp-demoapp/public-api/auth"
 	"github.com/hashicorp-demoapp/public-api/models"
+	"github.com/hashicorp-demoapp/public-api/payments"
 	"github.com/hashicorp-demoapp/public-api/resolver"
 	"github.com/hashicorp-demoapp/public-api/server"
 	"github.com/hashicorp/go-hclog"
@@ -27,6 +28,7 @@ var logger hclog.Logger
 var bindAddress = env.String("BIND_ADDRESS", false, ":8080", "Bind address for the server")
 var metricsAddress = env.String("METRICS_ADDRESS", false, ":9102", "Metrics address for the server")
 var productAddress = env.String("PRODUCT_API_URI", false, "http://localhost:9090", "Address for the product api")
+var paymentAddress = env.String("PAYMENT_API_URI", false, "http://localhost:8080", "Address for the payment api")
 
 func main() {
 	err := env.Parse()
@@ -73,11 +75,14 @@ func main() {
 	r.Use(auth.Middleware(authn))
 
 	// create the client to the products-api
-	pc := client.NewHTTP(*productAddress)
+	productsClient := client.NewHTTP(*productAddress)
+
+	// create the client for the payments-api
+	paymentClient := payments.NewHTTP(*paymentAddress)
 
 	// Graphql.
 	c := server.Config{
-		Resolvers: resolver.NewResolver(pc),
+		Resolvers: resolver.NewResolver(productsClient, paymentClient, logger),
 	}
 
 	// Check if the user is authenticated.

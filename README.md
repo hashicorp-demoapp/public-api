@@ -9,3 +9,20 @@ The build pipeline is setup with Circle CI to build and create a new Docker imag
 git tag [tag]
 git push origin [tag]
 ```
+
+# Payments API interaction
+
+```json
+mutation {
+  pay(
+    details: {
+      name: "nic",
+      type: "mastercard",
+      number: "1234-1231-1231-2322"
+      expiry: "10/02",
+      cv2: 123,
+      amount: 10.23,
+    }
+  )  
+}
+```

@@ -24,6 +24,15 @@ type Ingredient struct {
 	Quantity *int    `json:"quantity"`
 }
 
+type PaymentDetails struct {
+	Name   string  `json:"name"`
+	Type   string  `json:"type"`
+	Number string  `json:"number"`
+	Expiry string  `json:"expiry"`
+	Cv2    int     `json:"cv2"`
+	Amount float64 `json:"amount"`
+}
+
 type User struct {
 	ID   string  `json:"id"`
 	Name *string `json:"name"`

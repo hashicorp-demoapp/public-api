@@ -1,0 +1,8 @@
+input PaymentDetails {
+  name: String!
+  type: String!
+  number: String!
+  expiry: String!
+  cv2: Int!
+  amount: Float!
+}

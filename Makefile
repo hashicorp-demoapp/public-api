@@ -6,7 +6,7 @@ REPOSITORY=hashicorp-demoapp/public-api
 all: generate run
 
 generate:
-	go run scripts/gqlgen.go -v
+	go run scripts/gqlgen.go
 
 run:
 	go run main.go

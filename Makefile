@@ -1,5 +1,5 @@
-VERSION=v0.0.2
-REPOSITORY=hashicorp-demoapp/public-api
+VERSION=v0.0.3
+REPOSITORY=hashicorpdemoapp/public-api
 
 .PHONY: auth
 
@@ -16,6 +16,12 @@ build_linux:
 
 build_docker: build_linux
 	docker build -t ${REPOSITORY}:${VERSION} .
+
+build_docker_dev: build_linux
+	docker build -t ${REPOSITORY}:dev .
+
+run_functional_tests: build_docker_dev
+	cd functional_test && shipyard test
 
 auth:
 	docker run -it --rm \

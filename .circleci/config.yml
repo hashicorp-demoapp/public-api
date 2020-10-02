@@ -81,10 +81,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - functional-tests:
-          filters:
-            tags:
-              only: /.*/
       - publish-docker-release:
           requires:
             - build-go

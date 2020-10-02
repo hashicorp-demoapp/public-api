@@ -1,12 +1,12 @@
-VERSION=v0.0.2
-REPOSITORY=hashicorp-demoapp/public-api
+VERSION=v0.0.3
+REPOSITORY=hashicorpdemoapp/public-api
 
 .PHONY: auth
 
 all: generate run
 
 generate:
-	go run scripts/gqlgen.go -v
+	go run scripts/gqlgen.go
 
 run:
 	go run main.go
@@ -16,6 +16,15 @@ build_linux:
 
 build_docker: build_linux
 	docker build -t ${REPOSITORY}:${VERSION} .
+
+build_docker_dev: build_linux
+	docker build -t ${REPOSITORY}:dev .
+
+run_functional_tests: build_docker_dev
+	# First copy the config to a volume, this is needed for CircleCI
+	docker create -v data.volume:/config --name dummy alpine /bin/true
+	docker cp ./functional_test/config/config.json dummy:/config                                                                                                                            
+	cd functional_test && shipyard test
 
 auth:
 	docker run -it --rm \

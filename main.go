@@ -28,7 +28,7 @@ var logger hclog.Logger
 var bindAddress = env.String("BIND_ADDRESS", false, ":8080", "Bind address for the server")
 var metricsAddress = env.String("METRICS_ADDRESS", false, ":9102", "Metrics address for the server")
 var productAddress = env.String("PRODUCT_API_URI", false, "http://localhost:9090", "Address for the product api")
-var paymentAddress = env.String("PAYMENT_API_URI", false, "http://localhost:8080", "Address for the payment api")
+var paymentAddress = env.String("PAYMENT_API_URI", false, "http://localhost:18000", "Address for the payment api")
 
 func main() {
 	err := env.Parse()

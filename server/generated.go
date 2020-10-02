@@ -66,6 +66,13 @@ type ComplexityRoot struct {
 		Pay   func(childComplexity int, details *models.PaymentDetails) int
 	}
 
+	PaymentResponse struct {
+		CardCiphertext func(childComplexity int) int
+		CardPlaintext  func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Message        func(childComplexity int) int
+	}
+
 	Query struct {
 		Coffee      func(childComplexity int, coffeeID string) int
 		Coffees     func(childComplexity int) int
@@ -84,7 +91,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	Login(ctx context.Context) (bool, error)
-	Pay(ctx context.Context, details *models.PaymentDetails) (bool, error)
+	Pay(ctx context.Context, details *models.PaymentDetails) (*models.PaymentResponse, error)
 }
 type QueryResolver interface {
 	Version(ctx context.Context) (string, error)
@@ -204,6 +211,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.Pay(childComplexity, args["details"].(*models.PaymentDetails)), true
+
+	case "PaymentResponse.card_ciphertext":
+		if e.complexity.PaymentResponse.CardCiphertext == nil {
+			break
+		}
+
+		return e.complexity.PaymentResponse.CardCiphertext(childComplexity), true
+
+	case "PaymentResponse.card_plaintext":
+		if e.complexity.PaymentResponse.CardPlaintext == nil {
+			break
+		}
+
+		return e.complexity.PaymentResponse.CardPlaintext(childComplexity), true
+
+	case "PaymentResponse.id":
+		if e.complexity.PaymentResponse.ID == nil {
+			break
+		}
+
+		return e.complexity.PaymentResponse.ID(childComplexity), true
+
+	case "PaymentResponse.message":
+		if e.complexity.PaymentResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.PaymentResponse.Message(childComplexity), true
 
 	case "Query.coffee":
 		if e.complexity.Query.Coffee == nil {
@@ -386,6 +421,13 @@ type Ingredient {
   expiry: String!
   cv2: Int!
   amount: Float!
+}
+
+type PaymentResponse {
+  id: String!
+  message: String!
+  card_plaintext: String!
+  card_ciphertext: String!
 }`, BuiltIn: false},
 	{Name: "schema/schema.graphql", Input: `# Generic queries.
 type Query {
@@ -395,7 +437,7 @@ type Query {
 # Generic mutations.
 type Mutation {
   login: Boolean!
-  pay(details: PaymentDetails): Boolean!
+  pay(details: PaymentDetails): PaymentResponse!
 }
 
 # Check if the user is authenticated.
@@ -962,9 +1004,145 @@ func (ec *executionContext) _Mutation_pay(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*models.PaymentResponse)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNPaymentResponse2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐPaymentResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentResponse_id(ctx context.Context, field graphql.CollectedField, obj *models.PaymentResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentResponse",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentResponse_message(ctx context.Context, field graphql.CollectedField, obj *models.PaymentResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentResponse",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Message, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentResponse_card_plaintext(ctx context.Context, field graphql.CollectedField, obj *models.PaymentResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentResponse",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardPlaintext, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentResponse_card_ciphertext(ctx context.Context, field graphql.CollectedField, obj *models.PaymentResponse) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentResponse",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardCiphertext, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_version(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2574,6 +2752,48 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 	return out
 }
 
+var paymentResponseImplementors = []string{"PaymentResponse"}
+
+func (ec *executionContext) _PaymentResponse(ctx context.Context, sel ast.SelectionSet, obj *models.PaymentResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, paymentResponseImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PaymentResponse")
+		case "id":
+			out.Values[i] = ec._PaymentResponse_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "message":
+			out.Values[i] = ec._PaymentResponse_message(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "card_plaintext":
+			out.Values[i] = ec._PaymentResponse_card_plaintext(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "card_ciphertext":
+			out.Values[i] = ec._PaymentResponse_card_ciphertext(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -3066,6 +3286,20 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNPaymentResponse2githubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐPaymentResponse(ctx context.Context, sel ast.SelectionSet, v models.PaymentResponse) graphql.Marshaler {
+	return ec._PaymentResponse(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPaymentResponse2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐPaymentResponse(ctx context.Context, sel ast.SelectionSet, v *models.PaymentResponse) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._PaymentResponse(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNRole2githubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {

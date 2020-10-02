@@ -19,7 +19,7 @@ func NewHTTP(baseURL string) *HTTPClient {
 }
 
 // MakePayment calls the payments api
-func (h *HTTPClient) MakePayment(details *models.PaymentDetails) (bool, error) {
+func (h *HTTPClient) MakePayment(details *models.PaymentDetails) (*models.PaymentResponse, error) {
 	pr := &PaymentRequest{}
 	pr.FromModel(details)
 
@@ -30,14 +30,26 @@ func (h *HTTPClient) MakePayment(details *models.PaymentDetails) (bool, error) {
 	)
 
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return false, fmt.Errorf("Expected status 200, got %d", resp.StatusCode)
+		return nil, fmt.Errorf("Expected status 200, got %d", resp.StatusCode)
 	}
 
-	return true, nil
+	defer resp.Body.Close()
+
+	// decode the body
+	prResp := PaymentResponse{}
+	err = json.NewDecoder(resp.Body).Decode(&prResp)
+	if err != nil {
+		return nil, err
+	}
+
+	prModel := &models.PaymentResponse{}
+	prResp.ToModel(prModel)
+
+	return prModel, nil
 }
 
 // PaymentRequest defines the JSON request for the Payments API
@@ -80,4 +92,19 @@ func (pr *PaymentRequest) Read(p []byte) (n int, err error) {
 	n = copy(p, pr.buffer[pr.readIndex:])
 	pr.readIndex += int64(n)
 	return
+}
+
+type PaymentResponse struct {
+	ID             string `json:"id"`
+	Message        string `json:"message"`
+	CardPlaintext  string `json:"card_plaintext"`
+	CardCiphertext string `json:"card_ciphertext"`
+}
+
+// ToModel converts a go Struct into a payment response model
+func (pr *PaymentResponse) ToModel(m *models.PaymentResponse) {
+	m.ID = pr.ID
+	m.Message = pr.Message
+	m.CardCiphertext = pr.CardCiphertext
+	m.CardPlaintext = pr.CardPlaintext
 }

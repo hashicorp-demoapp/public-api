@@ -15,6 +15,6 @@ func NewPaymentService(c *payments.HTTPClient) *PaymentService {
 	return &PaymentService{c}
 }
 
-func (p *PaymentService) Pay(pd *models.PaymentDetails) (bool, error) {
+func (p *PaymentService) Pay(pd *models.PaymentDetails) (*models.PaymentResponse, error) {
 	return p.client.MakePayment(pd)
 }

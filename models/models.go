@@ -33,6 +33,13 @@ type PaymentDetails struct {
 	Amount float64 `json:"amount"`
 }
 
+type PaymentResponse struct {
+	ID             string `json:"id"`
+	Message        string `json:"message"`
+	CardPlaintext  string `json:"card_plaintext"`
+	CardCiphertext string `json:"card_ciphertext"`
+}
+
 type User struct {
 	ID   string  `json:"id"`
 	Name *string `json:"name"`

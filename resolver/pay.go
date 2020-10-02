@@ -7,7 +7,7 @@ import (
 )
 
 // Pay makes a call to the payment service and returns the response
-func (r *MutationResolver) Pay(ctx context.Context, details *models.PaymentDetails) (bool, error) {
+func (r *MutationResolver) Pay(ctx context.Context, details *models.PaymentDetails) (*models.PaymentResponse, error) {
 	r.Log.Info("Received Pay Mutation", "details", details)
 
 	ok, err := r.PaymentService.Pay(details)

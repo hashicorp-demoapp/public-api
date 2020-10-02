@@ -21,6 +21,9 @@ build_docker_dev: build_linux
 	docker build -t ${REPOSITORY}:dev .
 
 run_functional_tests: build_docker_dev
+	# First copy the config to a volume, this is needed for CircleCI
+	docker create -v data.volume:/config --name dummy alpine /bin/true
+	docker cp ./functional_test/config/config.json dummy:/config                                                                                                                            
 	cd functional_test && shipyard test
 
 auth:

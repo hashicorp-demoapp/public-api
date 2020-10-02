@@ -25,13 +25,12 @@ Scenario: Test Mutation
     ```
     #!/bin/bash
     curl 'http://localhost:8080/api' \
-    -H 'Accept-Encoding: gzip, deflate, br' \
-    -H 'Content-Type: application/json' \
-    -H 'Accept: application/json' \
-    -H 'Connection: keep-alive' \
-    -H 'DNT: 1' \
-    -H 'Origin: http://localhost:8080' \
-    --data-binary '{"query":"mutation {\n  pay(\n    details: {\n      name: \"nic\",\n      type: \"mastercard\",\n      number: \"1234-1231-1231-2322\"\n      expiry: \"10/02\",\n      cv2: 123,\n      amount: 10.23,\n    }\n  )  \n}"}'\
-     --compressed
+      -H 'Accept-Encoding: gzip, deflate, br' \
+      -H 'Content-Type: application/json' \
+      -H 'Accept: application/json' \
+      -H 'Connection: keep-alive' \
+      -H 'DNT: 1' \
+      -H 'Origin: http://localhost:8080' \
+      --data-binary '{"query":"mutation{ pay(details:{ name: \"nic\", type: \"mastercard\", number: \"1234123-0123123\", expiry:\"10/02\",    cv2: 1231, amount: 12.23 }){id, card_plaintext, card_ciphertext, message } }"}' --compressed
     ```
   Then I expect the exit code to be 0

@@ -21,8 +21,9 @@ container "products" {
     }
 
     volume {
-      source = "./config"
+      source = "data.volume"
       destination = "/config"
+      type = "volume"
     }
 }
 
@@ -48,7 +49,7 @@ container "payments" {
     }
 
     image {
-        name = "hashicorpdemoapp/payments:v0.0.2"
+        name = "hashicorpdemoapp/payments:v0.0.3"
     }
     
     port {

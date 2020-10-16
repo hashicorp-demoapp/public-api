@@ -9,6 +9,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/handler"
+	"github.com/hashicorp-demoapp/go-hckit"
 	"github.com/hashicorp-demoapp/product-api-go/client"
 	"github.com/hashicorp-demoapp/public-api/auth"
 	"github.com/hashicorp-demoapp/public-api/models"
@@ -42,6 +43,13 @@ func main() {
 		Level: hclog.Debug,
 	})
 
+	closer, err := hckit.InitGlobalTracer("public-api")
+	if err != nil {
+		logger.Error("Unable to initialize Tracer", "error", err)
+		os.Exit(1)
+	}
+	defer closer.Close()
+
 	// Authentication.
 	authn, err := authn.NewClient(authn.Config{
 		// The AUTHN_URL of your Keratin AuthN server. This will be used to verify tokens created by
@@ -71,6 +79,7 @@ func main() {
 	// Server.
 	r := mux.NewRouter()
 	r.Use(auth.Middleware(authn))
+	r.Use(hckit.TracingMiddleware)
 
 	// create the client to the products-api
 	pc := client.NewHTTP(*productAddress)

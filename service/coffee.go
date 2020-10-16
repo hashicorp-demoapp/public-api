@@ -15,7 +15,7 @@ func NewCoffeeService(c *client.HTTP) *CoffeeService {
 	return &CoffeeService{c}
 }
 
-// FindCoffees returns a list of tracks.
+// FindCoffees returns a list of coffees.
 func (s *CoffeeService) FindCoffees() ([]*models.Coffee, error) {
 	cofs, err := s.c.GetCoffees()
 	if err != nil {

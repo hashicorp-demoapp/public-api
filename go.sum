@@ -27,6 +27,7 @@ github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+Ce
 github.com/bombsimon/wsl v1.2.5/go.mod h1:43lEF/i0kpXbLCeDXL9LMT8c92HyBywXb0AsgMHYngM=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
+github.com/codahale/hdrhistogram v0.9.0/go.mod h1:sE/e/2PUdi/liOCUjSTXgM1o87ZssimdTWN964YiIeI=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
 github.com/coreos/go-etcd v2.0.0+incompatible/go.mod h1:Jez6KQU2B/sWsbdaef3ED8NzMklzPG4d5KIOhIy30Tk=
@@ -139,10 +140,14 @@ github.com/gostaticanalysis/analysisutil v0.0.3/go.mod h1:eEOZF4jCKGi+aprrirO9e7
 github.com/grpc-ecosystem/go-grpc-middleware v1.0.0/go.mod h1:FiyG127CGDf3tlThmgyCl78X/SZQqEOJBCDaAfeWzPs=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
 github.com/grpc-ecosystem/grpc-gateway v1.9.0/go.mod h1:vNeuVxBJEsws4ogUvrchl83t/GYV9WGTSLVdBhOQFDY=
+github.com/hashicorp-demoapp/go-hckit v0.0.1 h1:lweJTKKNnNc1YGd8n3QqGzsyeBBESXKV6i6KsQXtHoE=
+github.com/hashicorp-demoapp/go-hckit v0.0.1/go.mod h1:FwfwIzjNELljJiAqnah7UHPzTcUKKtvxDH9OFmS429g=
 github.com/hashicorp-demoapp/product-api-go v0.0.10 h1:SwZi+lY6Kmj0BHal8U5pwIvdHVUzW9XMIEG23j5cJls=
 github.com/hashicorp-demoapp/product-api-go v0.0.10/go.mod h1:8Wz57NbAhx5C2d/R5TU6LaWD5QLpWiRga846gf74OgA=
 github.com/hashicorp-demoapp/product-api-go v0.0.11 h1:qiIZNcuuuUrI8Sc1fUAR6lXc6g4w0sy7aRjD4Y4PBfY=
 github.com/hashicorp-demoapp/product-api-go v0.0.11/go.mod h1:8Wz57NbAhx5C2d/R5TU6LaWD5QLpWiRga846gf74OgA=
+github.com/hashicorp-demoapp/product-api-go v0.0.12 h1:16wyzf/eHekzUQ9cljDd51K9OTl4wiv78Pghz97Z3QU=
+github.com/hashicorp-demoapp/product-api-go v0.0.12/go.mod h1:OpIaKtmQfK6RGHOuZqTn/6XxqVOhXg0dlTaQyWuLtqY=
 github.com/hashicorp/go-hclog v0.10.0/go.mod h1:whpDNt7SSdeAju8AWKIWsul05p54N/39EeqMAyrmvFQ=
 github.com/hashicorp/go-hclog v0.11.0 h1:zf3QG3ap4KOMHzDLxBvq9ZtEFVSxQzVdH1ccl5NK2tU=
 github.com/hashicorp/go-hclog v0.11.0/go.mod h1:whpDNt7SSdeAju8AWKIWsul05p54N/39EeqMAyrmvFQ=

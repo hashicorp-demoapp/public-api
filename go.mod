@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.10.2
 	github.com/gorilla/mux v1.7.3
 	github.com/hashicorp-demoapp/go-hckit v0.0.1
-	github.com/hashicorp-demoapp/product-api-go v0.0.11
+	github.com/hashicorp-demoapp/product-api-go v0.0.12
 	github.com/hashicorp/go-hclog v0.11.0
 	github.com/keratin/authn-go v1.1.0
 	github.com/magiconair/properties v1.8.1
@@ -19,7 +19,3 @@ require (
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	github.com/vektah/gqlparser v1.2.0
 )
-
-replace github.com/hashicorp-demoapp/go-hckit => /Users/derekstrickland/code/consul-dev/hashicorp-demoapp/go-hckit
-
-replace github.com/hashicorp-demoapp/product-api-go => /Users/derekstrickland/code/consul-dev/hashicorp-demoapp/product-api-go

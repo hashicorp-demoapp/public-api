@@ -5,7 +5,8 @@ go 1.13
 require (
 	github.com/99designs/gqlgen v0.12.2
 	github.com/gorilla/mux v1.8.0
-	github.com/hashicorp-demoapp/product-api-go v0.0.11
+  github.com/hashicorp-demoapp/go-hckit v0.0.1
+	github.com/hashicorp-demoapp/product-api-go v0.0.12
 	github.com/hashicorp/go-hclog v0.14.1
 	github.com/keratin/authn-go v1.1.0
 	github.com/magiconair/properties v1.8.3

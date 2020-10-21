@@ -1,0 +1,15 @@
+input PaymentDetails {
+  name: String!
+  type: String!
+  number: String!
+  expiry: String!
+  cv2: Int!
+  amount: Float!
+}
+
+type PaymentResponse {
+  id: String!
+  message: String!
+  card_plaintext: String!
+  card_ciphertext: String!
+}

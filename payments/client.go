@@ -6,16 +6,19 @@ import (
 	"io"
 	"net/http"
 
+	hckit "github.com/hashicorp-demoapp/go-hckit"
 	"github.com/hashicorp-demoapp/public-api/models"
 )
 
 // HTTPClient is a concrete implmentation of an HTTP client which can communicate with the payments service
 type HTTPClient struct {
+	client  *http.Client
 	baseURL string
 }
 
 func NewHTTP(baseURL string) *HTTPClient {
-	return &HTTPClient{baseURL: baseURL}
+	c := &http.Client{Transport: hckit.TracingRoundTripper{Proxied: http.DefaultTransport}}
+	return &HTTPClient{c, baseURL}
 }
 
 // MakePayment calls the payments api
@@ -23,7 +26,7 @@ func (h *HTTPClient) MakePayment(details *models.PaymentDetails) (*models.Paymen
 	pr := &PaymentRequest{}
 	pr.FromModel(details)
 
-	resp, err := http.DefaultClient.Post(
+	resp, err := h.client.Post(
 		h.baseURL,
 		"application/json",
 		pr,

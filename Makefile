@@ -1,5 +1,5 @@
-VERSION=v0.0.3
-REPOSITORY=hashicorpdemoapp/public-api
+VERSION=v0.0.4
+REPOSITORY=jcolemorrison/hashicorp-demo-public-api
 
 .PHONY: auth
 
@@ -11,14 +11,24 @@ generate:
 run:
 	go run main.go
 
-build_linux:
-	CGO_ENABLED=0 GOOS=linux go build -o ./bin/public-api main.go
+build_linux_amd64:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/amd64/public-api main.go
 
-build_docker: build_linux
+build_linux_arm64:
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ./bin/arm64/public-api main.go
+
+build_docker: build_linux_amd64 build_linux_arm64
 	docker build -t ${REPOSITORY}:${VERSION} .
 
-build_docker_dev: build_linux
+build_docker_dev: build_linux_amd64 build_linux_arm64
 	docker build -t ${REPOSITORY}:dev .
+
+buildx_docker: build_linux_amd64 build_linux_arm64
+	docker buildx create --use --name multi_arch_build || true
+	docker buildx build --platform linux/amd64,linux/arm64 \
+		-t ${REPOSITORY}:${VERSION} \
+		--push \
+		.
 
 run_functional_tests: build_docker_dev
 	# First copy the config to a volume, this is needed for CircleCI

@@ -15,8 +15,11 @@ jobs:
           name: test application
           command: go test -v ./...
       - run:
-          name: build application (linux)
-          command: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/public-api
+          name: build application (linux amd64)
+          command: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/amd64/public-api
+      - run:
+          name: build application (linux arm64)
+          command: CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o bin/arm64/public-api
       - persist_to_workspace:
           root: /go/src/github.com/hashicorp-demoapp
           paths:
@@ -39,27 +42,52 @@ jobs:
           command: cd functional_test && shipyard test
 
 
+
   publish-docker-release:
     docker:
       - image: circleci/golang:1.13
     environment:
       GO111MODULE: "on"
+      DOCKER_BUILDKIT: 1
+      BUILDX_PLATFORMS: linux/amd64,linux/arm64
     working_directory: /go/src/github.com/hashicorp-demoapp/public-api
     steps:
       - setup_remote_docker
       - attach_workspace:
           at: /go/src/github.com/hashicorp-demoapp
       - run:
+          name: install docker buildx
+          command: |
+            BUILDX_BINARY_URL="https://github.com/docker/buildx/releases/download/v0.4.2/buildx-v0.4.2.linux-amd64"
+
+            curl --output docker-buildx \
+              --silent --show-error --location --fail --retry 3 \
+              "$BUILDX_BINARY_URL"
+
+            mkdir -p ~/.docker/cli-plugins
+
+            mv docker-buildx ~/.docker/cli-plugins/
+            chmod a+x ~/.docker/cli-plugins/docker-buildx
+
+            docker buildx install
+
+            # Run binfmt
+            docker run --rm --privileged tonistiigi/binfmt:latest --install "$BUILDX_PLATFORMS"
+
+            docker context create multi_arch_build
+
+            # Create Builder
+            docker buildx create --use multi_arch_build
+      - run:
           name: docker login
           command: docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
       - run:
-          name: docker build
+          name: docker buildx build and push
           command: |
-            docker build -t hashicorpdemoapp/public-api:${CIRCLE_TAG} .
-      - run:
-          name: docker push
-          command: |
-            docker push hashicorpdemoapp/public-api:${CIRCLE_TAG}
+            docker buildx build --platform linux/amd64,linux/arm64 \
+              -t hashicorpdemoapp/public-api:${CIRCLE_TAG} \
+              --push \
+              .
 
   publish-github-release:
     docker:

@@ -85,7 +85,7 @@ jobs:
           name: docker buildx build and push
           command: |
             docker buildx build --platform linux/amd64,linux/arm64 \
-              -t jcolemorrison/hashicorp-demo-public-api:${CIRCLE_TAG} \
+              -t hashicorpdemoapp/public-api:${CIRCLE_TAG} \
               --push \
               .
 

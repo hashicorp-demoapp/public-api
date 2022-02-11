@@ -1,0 +1,24 @@
+# Order queries
+extend type Query {
+  orders: [Order]
+  order(id: String!): Order
+}
+
+extend type Mutation {
+  order(items: [OrderItemInput!]): Order
+}
+
+type Order {
+  id: ID!
+  items: [OrderItem]
+}
+
+type OrderItem {
+  coffee: Coffee!
+  quantity: Int!
+}
+
+input OrderItemInput {
+  coffee: CoffeeInput!
+  quantity: Int!
+}

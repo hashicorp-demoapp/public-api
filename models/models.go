@@ -8,6 +8,12 @@ import (
 	"strconv"
 )
 
+type AuthResponse struct {
+	UserID   int    `json:"userId"`
+	Username string `json:"username"`
+	Token    string `json:"token"`
+}
+
 type Coffee struct {
 	ID          string        `json:"id"`
 	Name        *string       `json:"name"`
@@ -18,10 +24,30 @@ type Coffee struct {
 	Ingredients []*Ingredient `json:"ingredients"`
 }
 
+type CoffeeInput struct {
+	ID string `json:"id"`
+}
+
 type Ingredient struct {
 	ID       string  `json:"id"`
 	Name     *string `json:"name"`
 	Quantity *int    `json:"quantity"`
+	Unit     *string `json:"unit"`
+}
+
+type Order struct {
+	ID    string       `json:"id"`
+	Items []*OrderItem `json:"items"`
+}
+
+type OrderItem struct {
+	Coffee   *Coffee `json:"coffee"`
+	Quantity int     `json:"quantity"`
+}
+
+type OrderItemInput struct {
+	Coffee   *CoffeeInput `json:"coffee"`
+	Quantity int          `json:"quantity"`
 }
 
 type PaymentDetails struct {
@@ -43,6 +69,11 @@ type PaymentResponse struct {
 type User struct {
 	ID   string  `json:"id"`
 	Name *string `json:"name"`
+}
+
+type UserAuth struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 type Currency string

@@ -1,11 +1,13 @@
 # Ingredient queries.
 extend type Query {
-  ingredient(ingredientID: String!): Ingredient
-  ingredients: [Ingredient]
+  coffeeIngredients(coffeeID: String!): [Ingredient]
+  # ingredient(ingredientID: String!): Ingredient
+  # ingredients: [Ingredient]
 }
 
 type Ingredient {
   id: ID!
   name: String
   quantity: Int
+  unit: String
 }

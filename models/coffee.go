@@ -3,12 +3,12 @@ package models
 import (
 	"strconv"
 
-	productsapi "github.com/hashicorp-demoapp/product-api-go/data/model"
+	"github.com/hashicorp-demoapp/hashicups-client-go"
 )
 
 // CoffeeFromProductsAPI is an adaptor function which converts the products api model
 // into the local model
-func CoffeeFromProductsAPI(cof []productsapi.Coffee) ([]*Coffee, error) {
+func CoffeeFromProductsAPI(cof []hashicups.Coffee) ([]*Coffee, error) {
 	pc := make([]*Coffee, 0)
 
 	for i, co := range cof {
@@ -24,9 +24,9 @@ func CoffeeFromProductsAPI(cof []productsapi.Coffee) ([]*Coffee, error) {
 
 		// add the ingredients
 		ins := make([]*Ingredient, 0)
-		for _, i := range co.Ingredients {
+		for _, i := range co.Ingredient {
 			ins = append(ins, &Ingredient{
-				ID: strconv.Itoa(i.IngredientID),
+				ID: strconv.Itoa(i.ID),
 			})
 		}
 

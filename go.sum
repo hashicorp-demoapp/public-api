@@ -166,6 +166,16 @@ github.com/grpc-ecosystem/grpc-gateway v1.9.0/go.mod h1:vNeuVxBJEsws4ogUvrchl83t
 github.com/hashicorp-demoapp/go-hckit v0.0.1/go.mod h1:FwfwIzjNELljJiAqnah7UHPzTcUKKtvxDH9OFmS429g=
 github.com/hashicorp-demoapp/go-hckit v0.0.2 h1:mQ02OCFzxlCv0pv9zeAZDwAp7esCRYn99FhJ+QuOCE0=
 github.com/hashicorp-demoapp/go-hckit v0.0.2/go.mod h1:mhJOg3le42ccvVkMx1+uhflTHZK0bZ/rBiUbKYAYJnQ=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20210721190446-1df90c457bd4 h1:Rt8GW22FYXFLaY9cnfBfPSg9kAngQbagHm31wNoSbBU=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20210721190446-1df90c457bd4/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220208203135-614ee775d01c h1:dCTj/4XRUbrAEENxHnT2GVohlrFz3MFNSxDLMzJ0kUY=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220208203135-614ee775d01c/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220208203428-b72abc3e0894 h1:jDGmNlJGrJCumHssD1Z7pTwHDYZ91xHMetwQltY2WR4=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220208203428-b72abc3e0894/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211051608-4ba79fab01a9 h1:xYyLQLWCStYTI+NtYTO/aGPHLmPvyk9KWYzGhTk0HpQ=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211051608-4ba79fab01a9/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211052040-21835c69ed44 h1:4rS2ePH6mvp/fW9lal9rAAR9Zz0aOUua77Xw1JNii6Q=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211052040-21835c69ed44/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
 github.com/hashicorp-demoapp/product-api-go v0.0.12 h1:16wyzf/eHekzUQ9cljDd51K9OTl4wiv78Pghz97Z3QU=
 github.com/hashicorp-demoapp/product-api-go v0.0.12/go.mod h1:OpIaKtmQfK6RGHOuZqTn/6XxqVOhXg0dlTaQyWuLtqY=
 github.com/hashicorp/consul/api v1.1.0/go.mod h1:VmuI/Lkw1nC05EYQWNKwWGbkg+FbDBtguAZLlVdkD9Q=

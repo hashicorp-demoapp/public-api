@@ -1,7 +1,7 @@
 package resolver
 
 import (
-	"github.com/hashicorp-demoapp/product-api-go/client"
+	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp-demoapp/public-api/payments"
 	"github.com/hashicorp-demoapp/public-api/server"
 	"github.com/hashicorp-demoapp/public-api/service"
@@ -11,16 +11,16 @@ import (
 // Resolver is the grapqhl root resolver.
 // Add services here for convenient access in other resolvers.
 type Resolver struct {
-	CoffeeService  *service.CoffeeService
+	ProductService *service.ProductService
 	PaymentService *service.PaymentService
 	Log            hclog.Logger
 	// IngredientService *service.IngredientService
 	// UserService *service.UserService
 }
 
-func NewResolver(c *client.HTTP, pc *payments.HTTPClient, l hclog.Logger) *Resolver {
+func NewResolver(c *hashicups.Client, pc *payments.HTTPClient, l hclog.Logger) *Resolver {
 	return &Resolver{
-		service.NewCoffeeService(c),
+		service.NewProductService(c),
 		service.NewPaymentService(pc),
 		l,
 	}

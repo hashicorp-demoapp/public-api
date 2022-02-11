@@ -2,7 +2,6 @@ package resolver
 
 import (
 	"context"
-	"log"
 
 	"github.com/hashicorp-demoapp/public-api/auth"
 	"github.com/hashicorp-demoapp/public-api/models"
@@ -19,8 +18,6 @@ func (r *MutationResolver) SignUp(ctx context.Context, auth models.UserAuth) (*m
 func (r *MutationResolver) Login(ctx context.Context, auth models.UserAuth) (*models.AuthResponse, error) {
 	authResp, err := r.ProductService.SignIn(auth)
 	if err != nil {
-
-		log.Printf("%+v", err.Error())
 		return nil, err
 	}
 	return &authResp, nil

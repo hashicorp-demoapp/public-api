@@ -1,7 +1,6 @@
 package models
 
 import (
-	"log"
 	"strconv"
 
 	"github.com/hashicorp-demoapp/hashicups-client-go"
@@ -19,8 +18,6 @@ func IngredientsFromProductAPI(pIngs []hashicups.Ingredient) ([]*Ingredient, err
 			Quantity: &pIngs[i].Quantity,
 			Unit:     &pIngs[i].Unit,
 		}
-
-		log.Printf("%+v: %+v", ing, pIng)
 
 		ings = append(ings, ing)
 	}

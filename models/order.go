@@ -44,6 +44,16 @@ func OrderFromProductsAPI(po *hashicups.Order) (*Order, error) {
 			Image:       &po.Items[j].Coffee.Image,
 		}
 
+		// add the ingredients
+		ins := make([]*Ingredient, 0)
+		for _, i := range po.Items[j].Coffee.Ingredient {
+			ins = append(ins, &Ingredient{
+				ID: strconv.Itoa(i.ID),
+			})
+		}
+
+		c.Ingredients = ins
+
 		ois = append(ois, &OrderItem{
 			Coffee:   c,
 			Quantity: oi.Quantity,

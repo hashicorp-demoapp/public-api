@@ -7,7 +7,7 @@ require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp-demoapp/go-hckit v0.0.2
-	github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211052040-21835c69ed44 // indirect
+	github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211172642-60f047bae1f4 // indirect
 	github.com/hashicorp-demoapp/product-api-go v0.0.12
 	github.com/hashicorp/go-hclog v0.14.1
 	github.com/keratin/authn-go v1.1.0

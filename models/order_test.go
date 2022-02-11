@@ -36,6 +36,8 @@ var apiOrderModel = hashicups.Order{
 				ID:          123,
 				Name:        "Latte",
 				Teaser:      "This is a teaser",
+				Collection:  "Origins",
+				Origin:      "Summer 2014",
 				Description: "This is the description",
 				Price:       220,
 				Ingredient: []hashicups.CoffeeIngredient{
@@ -54,6 +56,8 @@ var apiOrderModel = hashicups.Order{
 				ID:          125,
 				Name:        "Espresso",
 				Teaser:      "This is a teaser",
+				Collection:  "Foundations",
+				Origin:      "Fall 2015",
 				Description: "This is the description",
 				Price:       200,
 				Ingredient: []hashicups.CoffeeIngredient{

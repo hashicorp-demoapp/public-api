@@ -19,6 +19,8 @@ type Coffee struct {
 	Name        *string       `json:"name"`
 	Image       *string       `json:"image"`
 	Teaser      *string       `json:"teaser"`
+	Collection  *string       `json:"collection"`
+	Origin      *string       `json:"origin"`
 	Description *string       `json:"description"`
 	Price       *float64      `json:"price"`
 	Ingredients []*Ingredient `json:"ingredients"`

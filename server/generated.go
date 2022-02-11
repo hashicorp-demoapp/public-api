@@ -53,11 +53,13 @@ type ComplexityRoot struct {
 	}
 
 	Coffee struct {
+		Collection  func(childComplexity int) int
 		Description func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Image       func(childComplexity int) int
 		Ingredients func(childComplexity int) int
 		Name        func(childComplexity int) int
+		Origin      func(childComplexity int) int
 		Price       func(childComplexity int, currency *models.Currency) int
 		Teaser      func(childComplexity int) int
 	}
@@ -159,6 +161,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AuthResponse.Username(childComplexity), true
 
+	case "Coffee.collection":
+		if e.complexity.Coffee.Collection == nil {
+			break
+		}
+
+		return e.complexity.Coffee.Collection(childComplexity), true
+
 	case "Coffee.description":
 		if e.complexity.Coffee.Description == nil {
 			break
@@ -193,6 +202,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Coffee.Name(childComplexity), true
+
+	case "Coffee.origin":
+		if e.complexity.Coffee.Origin == nil {
+			break
+		}
+
+		return e.complexity.Coffee.Origin(childComplexity), true
 
 	case "Coffee.price":
 		if e.complexity.Coffee.Price == nil {
@@ -492,6 +508,8 @@ type Coffee {
   name: String
   image: String
   teaser: String
+  collection: String
+  origin: String
   description: String
   price(currency: Currency = USD): Float
   ingredients: [Ingredient]
@@ -1000,6 +1018,68 @@ func (ec *executionContext) _Coffee_teaser(ctx context.Context, field graphql.Co
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Teaser, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Coffee_collection(ctx context.Context, field graphql.CollectedField, obj *models.Coffee) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Coffee",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Collection, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Coffee_origin(ctx context.Context, field graphql.CollectedField, obj *models.Coffee) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Coffee",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Origin, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3291,6 +3371,10 @@ func (ec *executionContext) _Coffee(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Coffee_image(ctx, field, obj)
 		case "teaser":
 			out.Values[i] = ec._Coffee_teaser(ctx, field, obj)
+		case "collection":
+			out.Values[i] = ec._Coffee_collection(ctx, field, obj)
+		case "origin":
+			out.Values[i] = ec._Coffee_origin(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Coffee_description(ctx, field, obj)
 		case "price":

@@ -15,6 +15,8 @@ type Coffee {
   name: String
   image: String
   teaser: String
+  collection: String
+  origin: String
   description: String
   price(currency: Currency = USD): Float
   ingredients: [Ingredient]

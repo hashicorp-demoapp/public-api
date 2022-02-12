@@ -97,6 +97,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		Coffee            func(childComplexity int, id string) int
 		CoffeeIngredients func(childComplexity int, coffeeID string) int
 		Coffees           func(childComplexity int) int
 		Order             func(childComplexity int, id string) int
@@ -119,6 +120,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Version(ctx context.Context) (string, error)
+	Coffee(ctx context.Context, id string) (*models.Coffee, error)
 	Coffees(ctx context.Context) ([]*models.Coffee, error)
 	CoffeeIngredients(ctx context.Context, coffeeID string) ([]*models.Ingredient, error)
 	Orders(ctx context.Context) ([]*models.Order, error)
@@ -368,6 +370,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PaymentResponse.Message(childComplexity), true
 
+	case "Query.coffee":
+		if e.complexity.Query.Coffee == nil {
+			break
+		}
+
+		args, err := ec.field_Query_coffee_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Coffee(childComplexity, args["id"].(string)), true
+
 	case "Query.coffeeIngredients":
 		if e.complexity.Query.CoffeeIngredients == nil {
 			break
@@ -493,7 +507,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 var sources = []*ast.Source{
 	{Name: "schema/coffee.graphql", Input: `# Coffee queries.
 extend type Query {
-  # coffee(coffeeID: String!): Coffee
+  coffee(id: String!): Coffee
   coffees: [Coffee!]!
 }
 
@@ -746,6 +760,21 @@ func (ec *executionContext) field_Query_coffeeIngredients_args(ctx context.Conte
 		}
 	}
 	args["coffeeID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_coffee_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithFieldInputContext(ctx, graphql.NewFieldInputWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -1836,6 +1865,44 @@ func (ec *executionContext) _Query_version(ctx context.Context, field graphql.Co
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_coffee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_coffee_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Coffee(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Coffee)
+	fc.Result = res
+	return ec.marshalOCoffee2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_coffees(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3605,6 +3672,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
+		case "coffee":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_coffee(ctx, field)
+				return res
+			})
 		case "coffees":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -4367,6 +4445,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
+}
+
+func (ec *executionContext) marshalOCoffee2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCoffee(ctx context.Context, sel ast.SelectionSet, v *models.Coffee) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Coffee(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOCurrency2ᚖgithubᚗcomᚋhashicorpᚑdemoappᚋpublicᚑapiᚋmodelsᚐCurrency(ctx context.Context, v interface{}) (*models.Currency, error) {

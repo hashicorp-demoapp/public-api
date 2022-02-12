@@ -180,6 +180,8 @@ github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211172642-60f047bae
 github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211172642-60f047bae1f4/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
 github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211213457-9e52722e25b1 h1:02T2BaoVkctOcoyeNgUuHqeJW57KYT1Idg1frrOVqck=
 github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220211213457-9e52722e25b1/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220212064447-a6eeb2e9fc33 h1:ZMEAOIn5fGdUy94aJjUK1IN8khwhLQUhjvgTpW1Okro=
+github.com/hashicorp-demoapp/hashicups-client-go v0.0.0-20220212064447-a6eeb2e9fc33/go.mod h1:fJF8CZhWlImByx49t7RZvuoxskStDwqIWi5/GOSJqGI=
 github.com/hashicorp-demoapp/product-api-go v0.0.12 h1:16wyzf/eHekzUQ9cljDd51K9OTl4wiv78Pghz97Z3QU=
 github.com/hashicorp-demoapp/product-api-go v0.0.12/go.mod h1:OpIaKtmQfK6RGHOuZqTn/6XxqVOhXg0dlTaQyWuLtqY=
 github.com/hashicorp/consul/api v1.1.0/go.mod h1:VmuI/Lkw1nC05EYQWNKwWGbkg+FbDBtguAZLlVdkD9Q=

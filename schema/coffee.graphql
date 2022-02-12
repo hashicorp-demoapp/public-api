@@ -1,6 +1,6 @@
 # Coffee queries.
 extend type Query {
-  # coffee(coffeeID: String!): Coffee
+  coffee(id: String!): Coffee
   coffees: [Coffee!]!
 }
 

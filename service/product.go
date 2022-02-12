@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp-demoapp/public-api/models"
 )
@@ -75,6 +77,25 @@ func (s *ProductService) GetCoffees() ([]*models.Coffee, error) {
 	}
 
 	return coffees, nil
+}
+
+// GetCoffee returns a specific coffee (list).
+func (s *ProductService) GetCoffee(coffeeID string) (*models.Coffee, error) {
+	cofs, err := s.c.GetCoffee(coffeeID)
+	if err != nil {
+		return nil, err
+	}
+
+	coffees, err := models.CoffeeFromProductsAPI(cofs)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(coffees) < 1 {
+		return nil, errors.New("No coffee with that ID")
+	}
+
+	return coffees[0], nil
 }
 
 // GetCoffeeIngredients - Returns list of coffee ingredients (no auth required)

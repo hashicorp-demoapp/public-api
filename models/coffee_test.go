@@ -30,6 +30,7 @@ var apiCoffeeModel = []hashicups.Coffee{
 		Teaser:      "This is a teaser",
 		Collection:  "Origins",
 		Origin:      "Summer 2014",
+		Color:       "#FFF",
 		Description: "This is the description",
 		Price:       220,
 		Ingredient: []hashicups.CoffeeIngredient{
@@ -47,6 +48,7 @@ var apiCoffeeModel = []hashicups.Coffee{
 		Teaser:      "This is a teaser",
 		Collection:  "Foundations",
 		Origin:      "Fall 2015",
+		Color:       "#000",
 		Description: "This is the description",
 		Price:       200,
 		Ingredient: []hashicups.CoffeeIngredient{

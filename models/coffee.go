@@ -20,6 +20,7 @@ func CoffeeFromProductsAPI(cof []hashicups.Coffee) ([]*Coffee, error) {
 			Teaser:      &cof[i].Teaser,
 			Collection:  &cof[i].Collection,
 			Origin:      &cof[i].Origin,
+			Color:       &cof[i].Color,
 			Description: &cof[i].Description,
 			Image:       &cof[i].Image,
 		}

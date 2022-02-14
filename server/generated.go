@@ -54,6 +54,7 @@ type ComplexityRoot struct {
 
 	Coffee struct {
 		Collection  func(childComplexity int) int
+		Color       func(childComplexity int) int
 		Description func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Image       func(childComplexity int) int
@@ -169,6 +170,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Coffee.Collection(childComplexity), true
+
+	case "Coffee.color":
+		if e.complexity.Coffee.Color == nil {
+			break
+		}
+
+		return e.complexity.Coffee.Color(childComplexity), true
 
 	case "Coffee.description":
 		if e.complexity.Coffee.Description == nil {
@@ -524,6 +532,7 @@ type Coffee {
   teaser: String
   collection: String
   origin: String
+  color: String
   description: String
   price(currency: Currency = USD): Float
   ingredients: [Ingredient]
@@ -1109,6 +1118,37 @@ func (ec *executionContext) _Coffee_origin(ctx context.Context, field graphql.Co
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Origin, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Coffee_color(ctx context.Context, field graphql.CollectedField, obj *models.Coffee) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Coffee",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Color, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3442,6 +3482,8 @@ func (ec *executionContext) _Coffee(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Coffee_collection(ctx, field, obj)
 		case "origin":
 			out.Values[i] = ec._Coffee_origin(ctx, field, obj)
+		case "color":
+			out.Values[i] = ec._Coffee_color(ctx, field, obj)
 		case "description":
 			out.Values[i] = ec._Coffee_description(ctx, field, obj)
 		case "price":

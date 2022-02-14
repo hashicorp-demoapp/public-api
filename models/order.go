@@ -42,6 +42,7 @@ func OrderFromProductsAPI(po *hashicups.Order) (*Order, error) {
 			Teaser:      &po.Items[j].Coffee.Teaser,
 			Collection:  &po.Items[j].Coffee.Collection,
 			Origin:      &po.Items[j].Coffee.Origin,
+			Color:       &po.Items[j].Coffee.Color,
 			Description: &po.Items[j].Coffee.Description,
 			Image:       &po.Items[j].Coffee.Image,
 		}

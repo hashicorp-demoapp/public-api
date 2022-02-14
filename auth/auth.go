@@ -24,21 +24,21 @@ func Middleware(auth *authn.Client) func(http.Handler) http.Handler {
 			ctx := r.Context()
 			authorization := r.Header.Get("Authorization")
 			token := strings.TrimPrefix(authorization, "Bearer ")
-			decodedToken, err := auth.SubjectFrom(token)
-			if err != nil {
-				next.ServeHTTP(w, r)
-				return
-			}
+			// decodedToken, err := auth.SubjectFrom(token)
+			// if err != nil {
+			// 	next.ServeHTTP(w, r)
+			// 	return
+			// }
 
-			ctx = context.WithValue(ctx, userCtxKey, decodedToken)
+			ctx = context.WithValue(ctx, userCtxKey, token)
 			r = r.WithContext(ctx)
 			next.ServeHTTP(w, r)
 		})
 	}
 }
 
-// IsAuthenticated returns wether or not the user is authenticated.
+// GetAuthHeader returns the auth header.
 // REQUIRES Middleware to have run.
-func IsAuthenticated(ctx context.Context) bool {
-	return ctx.Value(userCtxKey) != nil
+func GetAuthHeader(ctx context.Context) string {
+	return ctx.Value(userCtxKey).(string)
 }

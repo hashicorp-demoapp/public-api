@@ -7,11 +7,15 @@ import (
 )
 
 func (r *QueryResolver) Coffee(ctx context.Context, coffeeID string) (*models.Coffee, error) {
-	return nil, nil
+	coffee, err := r.ProductService.GetCoffee(coffeeID)
+	if err != nil {
+		return nil, err
+	}
+	return coffee, nil
 }
 
 func (r *QueryResolver) Coffees(ctx context.Context) ([]*models.Coffee, error) {
-	coffees, err := r.CoffeeService.FindCoffees()
+	coffees, err := r.ProductService.GetCoffees()
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,6 @@
 # Coffee queries.
 extend type Query {
-  coffee(coffeeID: String!): Coffee
+  coffee(id: String!): Coffee
   coffees: [Coffee!]!
 }
 
@@ -15,7 +15,14 @@ type Coffee {
   name: String
   image: String
   teaser: String
+  collection: String
+  origin: String
+  color: String
   description: String
   price(currency: Currency = USD): Float
   ingredients: [Ingredient]
+}
+
+input CoffeeInput {
+  id: ID!
 }

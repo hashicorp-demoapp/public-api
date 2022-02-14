@@ -1,10 +1,28 @@
 # User queries.
-extend type Query {
-  user(userID: String!): User 
-  users: [User]
+# extend type Query {
+  # user(userID: String!): User 
+  # users: [User]
+# }
+
+# User mutations.
+type Mutation {
+  signUp(auth: UserAuth!): AuthResponse!
+  login(auth: UserAuth!): AuthResponse!
+  signOut: Boolean! @isAuthenticated
 }
 
 type User {
   id: ID!
   name: String
+}
+
+input UserAuth {
+  username: String!
+  password: String!
+}
+
+type AuthResponse {
+  userId: Int!
+  username: String!
+  token: String!
 }

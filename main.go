@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/handler"
 	"github.com/hashicorp-demoapp/go-hckit"
-	"github.com/hashicorp-demoapp/product-api-go/client"
+	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp-demoapp/public-api/auth"
 	"github.com/hashicorp-demoapp/public-api/models"
 	"github.com/hashicorp-demoapp/public-api/payments"
@@ -92,7 +92,10 @@ func main() {
 	}).Handler)
 
 	// create the client to the products-api
-	productsClient := client.NewHTTP(*productAddress)
+	productsClient, err := hashicups.NewClient(productAddress, nil, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// create the client for the payments-api
 	paymentClient := payments.NewHTTP(*paymentAddress)
@@ -104,9 +107,9 @@ func main() {
 
 	// Check if the user is authenticated.
 	c.Directives.IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
-		isAuthenticated := auth.IsAuthenticated(ctx)
-		if !isAuthenticated {
-			return nil, fmt.Errorf("Access denied")
+		authHeader := auth.GetAuthHeader(ctx)
+		if authHeader == "" {
+			return nil, fmt.Errorf("Authorization header missing")
 		}
 
 		return next(ctx)

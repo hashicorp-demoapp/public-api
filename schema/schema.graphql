@@ -4,10 +4,7 @@ type Query {
 }
 
 # Generic mutations.
-type Mutation {
-  login: Boolean!
-  pay(details: PaymentDetails): PaymentResponse!
-}
+# type Mutation {}
 
 # Check if the user is authenticated.
 directive @isAuthenticated on FIELD_DEFINITION

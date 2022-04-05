@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/handler"
@@ -16,6 +17,7 @@ import (
 	"github.com/hashicorp-demoapp/public-api/payments"
 	"github.com/hashicorp-demoapp/public-api/resolver"
 	"github.com/hashicorp-demoapp/public-api/server"
+	"github.com/hashicorp-demoapp/public-api/service"
 	"github.com/hashicorp/go-hclog"
 	"github.com/nicholasjackson/env"
 	"github.com/rs/cors"
@@ -97,10 +99,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	productService := service.NewProductService(productsClient)
+
 	// create the client for the payments-api
 	paymentClient := payments.NewHTTP(*paymentAddress)
 
-	// Graphql.
+	// Graphql
 	c := server.Config{
 		Resolvers: resolver.NewResolver(productsClient, paymentClient, logger),
 	}
@@ -124,6 +128,21 @@ func main() {
 	// Handlers.
 	r.Handle("/", handler.Playground("Playground", "/api"))
 	r.Handle("/api", handler.GraphQL(server.NewExecutableSchema(c)))
+	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		var hcFailedServices []string
+		if !productService.HealthCheck() {
+			hcFailedServices = append(hcFailedServices, "product-api")
+		}
+		if !paymentClient.HealthCheck() {
+			hcFailedServices = append(hcFailedServices, "payments")
+		}
+		if len(hcFailedServices) > 0 {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "error. the following services are down: %s", strings.Join(hcFailedServices, ", "))
+			return
+		}
+		fmt.Fprintf(w, "%s", "ok")
+	})
 
 	logger.Info("Starting server", "bind", *bindAddress, "metrics", *metricsAddress)
 

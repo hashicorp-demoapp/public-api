@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"fmt"
+	"net/http"
 
 	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp-demoapp/public-api/models"
@@ -15,6 +17,17 @@ type ProductService struct {
 // NewProductService creates a new ProductService.
 func NewProductService(c *hashicups.Client) *ProductService {
 	return &ProductService{c}
+}
+
+func (s *ProductService) HealthCheck() bool {
+	resp, err := s.c.HTTPClient.Get(fmt.Sprintf("%s/health", s.c.HostURL))
+	if err != nil {
+		return false
+	}
+	if resp.StatusCode != http.StatusOK {
+		return false
+	}
+	return true
 }
 
 // SignUp - Create new user, return user token upon successful creation

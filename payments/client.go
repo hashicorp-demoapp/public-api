@@ -55,6 +55,36 @@ func (h *HTTPClient) MakePayment(details *models.PaymentDetails) (*models.Paymen
 	return prModel, nil
 }
 
+// HealthCheck checks whether the payments API is up
+func (h *HTTPClient) HealthCheck() bool {
+	resp, err := h.client.Get(fmt.Sprintf("%s/actuator/health", h.baseURL))
+	if err != nil {
+		return false
+	}
+	if resp.StatusCode != http.StatusOK {
+		return false
+	}
+
+	defer resp.Body.Close()
+
+	// decode the body
+	hcResp := HealthCheckResponse{}
+	err = json.NewDecoder(resp.Body).Decode(&hcResp)
+	if err != nil {
+		return false
+	}
+
+	if hcResp.Status != "UP" {
+		return false
+	}
+
+	return true
+}
+
+type HealthCheckResponse struct {
+	Status string `json:"status"`
+}
+
 // PaymentRequest defines the JSON request for the Payments API
 type PaymentRequest struct {
 	Name   string `json:"name"`

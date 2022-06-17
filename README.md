@@ -21,7 +21,7 @@ You can interact with the graphql service using the ui which is accessible in yo
 
 ## Request
 
-```json
+```graphql
 mutation {
   pay(
     details: {

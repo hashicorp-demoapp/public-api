@@ -36,7 +36,7 @@ mutation {
     id,
     card_plaintext,
     card_ciphertext,
-		message
+    message
   } 
 }
 ```

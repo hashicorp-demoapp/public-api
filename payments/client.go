@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/docker/docker/daemon/logger"
 	hckit "github.com/hashicorp-demoapp/go-hckit"
 	"github.com/hashicorp-demoapp/public-api/models"
 )
@@ -25,6 +26,8 @@ func NewHTTP(baseURL string) *HTTPClient {
 func (h *HTTPClient) MakePayment(details *models.PaymentDetails) (*models.PaymentResponse, error) {
 	pr := &PaymentRequest{}
 	pr.FromModel(details)
+
+	logger.Info("Payment Service", "url", h.baseURL)
 
 	resp, err := h.client.Post(
 		h.baseURL,

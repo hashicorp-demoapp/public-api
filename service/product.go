@@ -20,7 +20,7 @@ func NewProductService(c *hashicups.Client) *ProductService {
 }
 
 func (s *ProductService) HealthCheck() bool {
-	resp, err := s.c.HTTPClient.Get(fmt.Sprintf("%s/health", s.c.HostURL))
+	resp, err := s.c.HTTPClient.Get(fmt.Sprintf("%s/health/readyz", s.c.HostURL))
 	if err != nil {
 		return false
 	}

@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp-demoapp/go-hckit"
 	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp-demoapp/public-api/auth"
+	"github.com/hashicorp-demoapp/public-api/handlers"
 	"github.com/hashicorp-demoapp/public-api/models"
 	"github.com/hashicorp-demoapp/public-api/payments"
 	"github.com/hashicorp-demoapp/public-api/resolver"
@@ -33,6 +34,7 @@ var bindAddress = env.String("BIND_ADDRESS", false, ":8080", "Bind address for t
 var metricsAddress = env.String("METRICS_ADDRESS", false, ":9102", "Metrics address for the server")
 var productAddress = env.String("PRODUCT_API_URI", false, "http://localhost:9090", "Address for the product api")
 var paymentAddress = env.String("PAYMENT_API_URI", false, "http://localhost:18000", "Address for the payment api")
+var errorRate = env.Int("ERROR_RATE", false, 0, "Integer between 0 and 100 that represents how often the service should return 500 error code")
 
 func main() {
 	err := env.Parse()
@@ -84,6 +86,8 @@ func main() {
 	// Server.
 	r := mux.NewRouter()
 	r.Use(auth.Middleware(authn))
+	errorsMiddleware := handlers.NewErrorMiddleware(*errorRate, logger)
+	r.Use(errorsMiddleware.Middleware)
 	r.Use(hckit.TracingMiddleware)
 
 	// Enable CORS for all hosts

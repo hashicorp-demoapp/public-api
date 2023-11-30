@@ -1,4 +1,4 @@
-VERSION=v0.0.9
+VERSION=v0.0.10
 REPOSITORY=hashicorpdemoapp/public-api
 
 .PHONY: auth
@@ -16,6 +16,9 @@ build_linux_amd64:
 
 build_linux_arm64:
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o ./bin/arm64/public-api main.go
+
+build_darwin_arm64:
+	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -o ./bin/arm64-darwin/public-api main.go
 
 build_docker: build_linux_amd64 build_linux_arm64
 	docker build -t ${REPOSITORY}:${VERSION} .
